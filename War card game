@@ -1,0 +1,71 @@
+// declaring variables for card game
+var suits = ['Hearts', 'Spades', 'Clubs', 'Diamonds']
+var values = ['A',1,2,3,4,5,6,7,8,9,10,'J','Q','K']
+// creating function to start game
+function startGame(){
+    let deck1 = new Deck(newDeck());
+
+    let tie = 0;
+
+    console.log(deck1)
+    
+    deck1.shuffle();
+    let player1 = new Player(deck1.cards.splice(0,26))
+    let player2 = new Player(deck1.cards.splice(0,26))
+
+// creating a while loop to make points get distributed and using .pop to bring top card in
+    while (player1.hand.length > 0){
+        let p1 = player1.hand.pop()
+        let p2 = player2.hand.pop()
+        console.log(`p1:${p1.suit}${p1.value}  p2:${p2.suit}${p2.value}`)
+        if(p1.value > p2.value){
+            player1.score++
+        }else if(p1.value < p2.value){
+            player2.score++
+        } else{
+            tie++;
+        }
+    }
+    console.log(`player 1 points: ${player1.score} tie:${tie} player 2 points: ${player2.score}`)
+}
+
+// creating class for cards declaring the suit and value
+class Card{
+    constructor(suit,value){
+        this.suit = suit;
+        this.value = value;
+    }
+}
+
+// function for new deck and assigning suit and value
+function newDeck(){
+    return suits.flatMap(suit =>{
+        return values.map(value =>{
+            return new Card(suit,value)
+        });
+    });
+}
+ 
+// creating class for deck to make a shuffle for the deck and cards
+class Deck {
+    constructor(cards){
+        this.cards = cards;
+    }
+    shuffle(){
+        this.cards = this.cards.sort(() => Math.random() - 0.5);
+    }
+}
+
+// declaring game deck to new deck and shuffle
+const gameDeck = new Deck (newDeck());
+gameDeck.shuffle();
+
+// making player class for score and hand with cards in it
+class Player{
+    constructor (cards){
+        this.score = 0;
+        this.hand = cards;
+    }
+}
+
+startGame();
